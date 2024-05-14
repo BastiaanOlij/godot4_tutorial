@@ -1,0 +1,81 @@
+[gd_scene load_steps=11 format=3 uid="uid://b76ow8tad8mvr"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_0usdb"]
+[ext_resource type="PackedScene" uid="uid://lo63a1gw1o0q" path="res://detector.tscn" id="2_jeg7f"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0j8j5"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_cirbq"]
+sky_material = SubResource("ProceduralSkyMaterial_0j8j5")
+
+[sub_resource type="Environment" id="Environment_12r5i"]
+background_mode = 2
+sky = SubResource("Sky_cirbq")
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_8s5rd"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_lpl22"]
+radius = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_3adas"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_wpgta"]
+radius = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_oyb5w"]
+size = Vector3(1, 0.1, 0.5)
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_0usdb")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_12r5i")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
+tracker = &"left_hand"
+
+[node name="Test" type="MeshInstance3D" parent="XROrigin3D/LeftHand"]
+mesh = SubResource("BoxMesh_8s5rd")
+
+[node name="StaticBody3D" type="AnimatableBody3D" parent="XROrigin3D/LeftHand"]
+sync_to_physics = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/LeftHand/StaticBody3D"]
+shape = SubResource("SphereShape3D_lpl22")
+
+[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
+tracker = &"right_hand"
+
+[node name="Test" type="MeshInstance3D" parent="XROrigin3D/RightHand"]
+mesh = SubResource("BoxMesh_3adas")
+
+[node name="StaticBody3D" type="AnimatableBody3D" parent="XROrigin3D/RightHand"]
+sync_to_physics = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/RightHand/StaticBody3D"]
+shape = SubResource("SphereShape3D_wpgta")
+
+[node name="Table" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.536081, -0.842021)
+mesh = SubResource("BoxMesh_oyb5w")
+
+[node name="ARToggle" parent="." instance=ExtResource("2_jeg7f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.344734, 0.687895, -0.648422)
+
+[connection signal="toggled" from="ARToggle" to="." method="_on_detector_toggled"]
