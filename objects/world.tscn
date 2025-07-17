@@ -1,0 +1,67 @@
+[gd_scene load_steps=6 format=3 uid="uid://72x8dv67np16"]
+
+[ext_resource type="PackedScene" uid="uid://cd64h3qcmpjqu" path="res://objects/floor.tscn" id="1_rxwto"]
+[ext_resource type="PackedScene" uid="uid://623lyc5v3wn5" path="res://objects/wall.tscn" id="2_qbjm4"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rxwto"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_cirbq"]
+sky_material = SubResource("ProceduralSkyMaterial_rxwto")
+
+[sub_resource type="Environment" id="Environment_qbjm4"]
+background_mode = 2
+sky = SubResource("Sky_cirbq")
+tonemap_mode = 2
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_qbjm4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+directional_shadow_max_distance = 20.0
+
+[node name="Floor" parent="." instance=ExtResource("1_rxwto")]
+
+[node name="Wall01" parent="." instance=ExtResource("2_qbjm4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0.75)
+
+[node name="Wall07" parent="." instance=ExtResource("2_qbjm4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0.75)
+
+[node name="Wall08" parent="." instance=ExtResource("2_qbjm4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0.75)
+
+[node name="Wall02" parent="." instance=ExtResource("2_qbjm4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0.75)
+
+[node name="Wall03" parent="." instance=ExtResource("2_qbjm4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0.75)
+
+[node name="Wall09" parent="." instance=ExtResource("2_qbjm4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0.75)
+
+[node name="Wall10" parent="." instance=ExtResource("2_qbjm4")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 7, 0, -0.25)
+
+[node name="Wall12" parent="." instance=ExtResource("2_qbjm4")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 7, 0, -2.25)
+
+[node name="Wall13" parent="." instance=ExtResource("2_qbjm4")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7, 0, -2.25)
+
+[node name="Wall11" parent="." instance=ExtResource("2_qbjm4")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7, 0, -0.25)
+
+[node name="Wall04" parent="." instance=ExtResource("2_qbjm4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 3)
+
+[node name="Wall05" parent="." instance=ExtResource("2_qbjm4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 3)
+
+[node name="Wall06" parent="." instance=ExtResource("2_qbjm4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)

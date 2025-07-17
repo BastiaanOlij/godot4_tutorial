@@ -10,24 +10,39 @@ config_version=5
 
 [application]
 
-config/name="XR Tutorial 4.2"
-run/main_scene="res://main.tscn"
-config/features=PackedStringArray("4.2", "GL Compatibility")
+config/name="XR Tutorial FPS part1"
+config/description="Tutorial for Godot 4 XR FPS controller"
+run/main_scene="uid://h0trfgfqg5fm"
+config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
+run/main_scene.mobile="uid://b76ow8tad8mvr"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godotopenxrvendors/plugin.cfg")
+enabled=PackedStringArray()
+
+[layer_names]
+
+3d_render/layer_1="Default"
+3d_render/layer_2="HMD Only"
+3d_render/layer_3="Spectator Only"
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
 
 [rendering]
 
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"
+renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
+lights_and_shadows/directional_shadow/size=8192
+lights_and_shadows/directional_shadow/size.mobile=4096
 
 [xr]
 
 openxr/enabled=true
+openxr/reference_space=2
+openxr/environment_blend_mode=0
 openxr/foveation_level=3
 openxr/foveation_dynamic=true
 shaders/enabled=true

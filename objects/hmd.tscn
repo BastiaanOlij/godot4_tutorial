@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://cyyi7if4uax0q"]
+
+[ext_resource type="Material" uid="uid://6o2hblvsynhx" path="res://materials/shiny_black_material.tres" id="1_b3nd2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_gqmld"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_gqmld"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.1
+
+[node name="HMD" type="Node3D"]
+
+[node name="Center" type="MeshInstance3D" parent="."]
+layers = 4
+material_override = ExtResource("1_b3nd2")
+mesh = SubResource("BoxMesh_gqmld")
+
+[node name="Side01" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.05, 0, 0)
+layers = 4
+material_override = ExtResource("1_b3nd2")
+mesh = SubResource("CylinderMesh_gqmld")
+
+[node name="Side02" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.05, 0, 0)
+layers = 4
+material_override = ExtResource("1_b3nd2")
+mesh = SubResource("CylinderMesh_gqmld")

@@ -1,0 +1,49 @@
+[gd_scene load_steps=8 format=3 uid="uid://c8kvu7p33cba5"]
+
+[ext_resource type="Script" uid="uid://deydr6oq70djh" path="res://objects/camera.gd" id="1_exrbp"]
+[ext_resource type="Material" uid="uid://6o2hblvsynhx" path="res://materials/shiny_black_material.tres" id="2_n8nd1"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_d7esd"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.06
+
+[sub_resource type="BoxMesh" id="BoxMesh_tp7yf"]
+size = Vector3(0.1, 0.1, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_a34r7"]
+size = Vector3(0.2, 0.12, 0.01)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pjeuq"]
+shading_mode = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_s5y33"]
+size = Vector2(0.18, 0.1)
+
+[node name="Camera" type="Node3D"]
+editor_description = "This object allows us to visualise where our spectator camera is to our player.	"
+script = ExtResource("1_exrbp")
+
+[node name="Lens" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.03)
+layers = 2
+material_override = ExtResource("2_n8nd1")
+mesh = SubResource("CylinderMesh_d7esd")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.16)
+layers = 2
+material_override = ExtResource("2_n8nd1")
+mesh = SubResource("BoxMesh_tp7yf")
+
+[node name="Display" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16, 0, -0.09)
+layers = 2
+material_override = ExtResource("2_n8nd1")
+mesh = SubResource("BoxMesh_a34r7")
+
+[node name="Screen" type="MeshInstance3D" parent="Display"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.01)
+layers = 2
+material_override = SubResource("StandardMaterial3D_pjeuq")
+mesh = SubResource("QuadMesh_s5y33")

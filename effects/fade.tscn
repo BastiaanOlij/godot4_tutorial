@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://dyekd2xothdv"]
+
+[ext_resource type="Script" uid="uid://dp4nwbymggxv5" path="res://effects/fade.gd" id="1_tc5df"]
+[ext_resource type="Shader" uid="uid://cd11sdyt3mlh1" path="res://effects/fade.gdshader" id="2_ecav0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_latue"]
+resource_local_to_scene = true
+render_priority = 90
+shader = ExtResource("2_ecav0")
+shader_parameter/alpha = 0.05
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_trmx3"]
+orientation = 2
+
+[node name="Fade" type="Node3D"]
+script = ExtResource("1_tc5df")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
+material_override = SubResource("ShaderMaterial_latue")
+mesh = SubResource("PlaneMesh_trmx3")

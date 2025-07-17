@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://h0trfgfqg5fm"]
+
+[ext_resource type="PackedScene" uid="uid://c8kvu7p33cba5" path="res://objects/camera.tscn" id="1_0d0s6"]
+[ext_resource type="PackedScene" uid="uid://b76ow8tad8mvr" path="res://main.tscn" id="1_7odkq"]
+[ext_resource type="Script" uid="uid://c3itoasjfwtiu" path="res://spectator_view.gd" id="1_sgr1b"]
+
+[node name="SpectatorView" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_sgr1b")
+
+[node name="SpectatorContainer" type="SubViewportContainer" parent="."]
+layout_mode = 1
+offset_right = 512.0
+offset_bottom = 512.0
+
+[node name="SpectatorViewport" type="SubViewport" parent="SpectatorContainer"]
+handle_input_locally = false
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SpectatorContainer/SpectatorViewport"]
+transform = Transform3D(-0.999353, -1.18361e-09, 0.0359636, 0.0117169, 0.945439, 0.325588, -0.0340014, 0.325799, -0.944827, 0, 2, -3)
+cull_mask = 1048573
+current = true
+
+[node name="Camera" parent="SpectatorContainer/SpectatorViewport/Camera3D" instance=ExtResource("1_0d0s6")]
+transform = Transform3D(-1, -9.31323e-10, -8.9407e-08, 1.86265e-09, 1, 0, 8.56817e-08, 0, -1, -0.059, 0, 0)
+
+[node name="HMD" type="SubViewport" parent="."]
+
+[node name="Main" parent="HMD" instance=ExtResource("1_7odkq")]
