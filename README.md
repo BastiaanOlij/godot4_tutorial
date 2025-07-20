@@ -4,7 +4,6 @@ These are support files for my Godot 4 tutorial series.
 
 Please see branches for files specific to each tutorial:
 
-|----------|---------------|---------|
 |  Branch  |  Description  |  Video  |
 |----------|---------------|---------|
 | [getting_started_41](https://github.com/BastiaanOlij/godot4_tutorial/tree/getting_started_41)  | Getting started project for Godot 4.1  | [Getting Started with OpenXR in Godot (updated version)](https://www.youtube.com/watch?v=shbHGhkh4NM)  |
