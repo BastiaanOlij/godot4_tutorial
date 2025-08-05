@@ -6,13 +6,40 @@ extends XROrigin3D
 ## to it's parent CharacterBody3D node.
 
 ## How far away before we start fading to black
-@export_range(0.01, 1.0, 0.01, "suffix:m") var max_distance = 0.5
+@export_range(0.01, 1.0, 0.01, "suffix:m") var max_distance = 0.8
 
 ## Distance over which we fade out
 @export_range(0.01, 1.0, 0.01, "suffix:m") var fade_distance = 0.2
 
 ## Our fade effect object
 @export var fade_effect : FadeEffect
+
+## Size of our head
+@export_range(0.05, 0.5, 0.01) var head_radius = 0.15
+
+## Our head height
+@export_range(0.5, 2.0, 0.01) var head_height = 1.6
+
+var shape_query : PhysicsShapeQueryParameters3D
+
+func _ready():
+	# Do not run when in editor!
+	if Engine.is_editor_hint():
+		return
+
+	# Do not run if we're not a child of a CharacterBody3D node.
+	var character_body : CharacterBody3D = get_parent()
+	if not character_body:
+		return
+
+	var shape : SphereShape3D = SphereShape3D.new()
+	shape.radius = head_radius
+
+	shape_query = PhysicsShapeQueryParameters3D.new()
+	shape_query.collision_mask = character_body.collision_mask
+	shape_query.exclude = [ character_body.get_rid() ]
+	shape_query.shape = shape
+
 
 # Provide our configuration warnings
 func _get_configuration_warnings():
@@ -89,9 +116,21 @@ func _physics_process(_delta):
 	################################
 	# Handle fade
 
+	# Check if our head collides if moved to the camera position
+	var space = PhysicsServer3D.body_get_space(character_body.get_rid())
+	var state = PhysicsServer3D.space_get_direct_state(space)
+
+	var t : Transform3D = Transform3D()
+	t.origin = character_body.global_transform * Vector3(0.0, head_height, 0.0)
+	shape_query.transform = t
+	shape_query.motion = camera.global_position - t.origin
+
+	var collision = state.cast_motion(shape_query)
+	var is_colliding : bool = not collision.is_empty() and collision[0] < 1.0
+
 	# Calculate how far away we are from our target location
 	var distance = (character_body.global_position - new_position).length()
 
 	var fade = clamp((distance - max_distance) / fade_distance, 0.0, 1.0)
 	if fade_effect:
-		fade_effect.fade = fade
+		fade_effect.fade = 1.0 if is_colliding else fade

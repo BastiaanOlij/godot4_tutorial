@@ -16,6 +16,8 @@ orientation = 2
 script = ExtResource("1_tc5df")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 visible = false
+layers = 10
 material_override = SubResource("ShaderMaterial_latue")
 mesh = SubResource("PlaneMesh_trmx3")

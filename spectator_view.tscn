@@ -16,16 +16,36 @@ offset_bottom = 512.0
 
 [node name="SpectatorViewport" type="SubViewport" parent="SpectatorContainer"]
 handle_input_locally = false
+msaa_3d = 2
+size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="SpectatorContainer/SpectatorViewport"]
 transform = Transform3D(-0.999353, -1.18361e-09, 0.0359636, 0.0117169, 0.945439, 0.325588, -0.0340014, 0.325799, -0.944827, 0, 2, -3)
-cull_mask = 1048573
+cull_mask = 1048565
 current = true
 
 [node name="Camera" parent="SpectatorContainer/SpectatorViewport/Camera3D" instance=ExtResource("1_0d0s6")]
 transform = Transform3D(-1, -9.31323e-10, -8.9407e-08, 1.86265e-09, 1, 0, 8.56817e-08, 0, -1, -0.059, 0, 0)
 
+[node name="FirstPersonContainer" type="SubViewportContainer" parent="."]
+layout_mode = 1
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 532.0
+offset_bottom = 532.0
+
+[node name="FirstPersonViewport" type="SubViewport" parent="FirstPersonContainer"]
+handle_input_locally = false
+msaa_3d = 2
+size = Vector2i(384, 384)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="FirstPersonContainer/FirstPersonViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+cull_mask = 1048569
+
 [node name="HMD" type="SubViewport" parent="."]
+msaa_3d = 2
 
 [node name="Main" parent="HMD" instance=ExtResource("1_7odkq")]

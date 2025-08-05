@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="XR Tutorial FPS part1"
-config/description="Tutorial for Godot 4 XR FPS controller"
+config/name="XR Tutorial FPC part 2"
+config/description="Tutorial for Godot 4 XR First Person Controller"
 run/main_scene="uid://h0trfgfqg5fm"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
@@ -24,8 +24,9 @@ enabled=PackedStringArray()
 [layer_names]
 
 3d_render/layer_1="Default"
-3d_render/layer_2="HMD Only"
-3d_render/layer_3="Spectator Only"
+3d_render/layer_2="HMD only"
+3d_render/layer_3="Spectator only"
+3d_render/layer_4="First person view only"
 
 [physics]
 
@@ -37,6 +38,7 @@ renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
 lights_and_shadows/directional_shadow/size=8192
 lights_and_shadows/directional_shadow/size.mobile=4096
+anti_aliasing/quality/msaa_3d=1
 
 [xr]
 

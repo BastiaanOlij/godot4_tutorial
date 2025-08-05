@@ -17,6 +17,15 @@ func _ready():
 		# Vulkan only, for Compatibility see project settings.
 		vp.vrs_mode = Viewport.VRS_XR
 
+		# Connect to OpenXR events
+		xr_interface.connect("session_begun", _on_session_begun)
+
 		print("OpenXR initialised successfully")
 	else:
 		print("OpenXR not initialized, please check if your headset is connected")
+
+func _on_session_begun():
+	var frame_rate = xr_interface.get_display_refresh_rate()
+
+	# Sync physics with refresh rate
+	Engine.physics_ticks_per_second = frame_rate

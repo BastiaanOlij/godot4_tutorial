@@ -3,7 +3,6 @@
 [sub_resource type="OpenXRAction" id="OpenXRAction_emij5"]
 resource_name = "trigger"
 localized_name = "Trigger"
-action_type = 0
 toplevel_paths = PackedStringArray("/user/hand/left", "/user/hand/right")
 
 [sub_resource type="OpenXRAction" id="OpenXRAction_lae07"]

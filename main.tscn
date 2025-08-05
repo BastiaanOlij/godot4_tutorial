@@ -1,14 +1,19 @@
-[gd_scene load_steps=17 format=3 uid="uid://b76ow8tad8mvr"]
+[gd_scene load_steps=21 format=3 uid="uid://b76ow8tad8mvr"]
 
 [ext_resource type="Script" uid="uid://cgwg7tyrwreyv" path="res://main.gd" id="1_0usdb"]
 [ext_resource type="PackedScene" uid="uid://cyyi7if4uax0q" path="res://objects/hmd.tscn" id="2_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://dbkiigg2vm2x7" path="res://objects/axis.tscn" id="2_h2yge"]
+[ext_resource type="Script" uid="uid://cr87psvh4hbhd" path="res://player/character_body_3d.gd" id="3_5vw27"]
 [ext_resource type="Script" uid="uid://biasxjw6teuqt" path="res://player/xr_character_controller.gd" id="4_lquwl"]
 [ext_resource type="PackedScene" uid="uid://dyekd2xothdv" path="res://effects/fade.tscn" id="6_5vw27"]
 [ext_resource type="PackedScene" uid="uid://72x8dv67np16" path="res://objects/world.tscn" id="6_7mycd"]
 [ext_resource type="Texture2D" uid="uid://3uhe4qyssf0b" path="res://assets/misc/pattern.png" id="6_272bh"]
+[ext_resource type="Script" uid="uid://ckh3f7bqrxq42" path="res://player/functions/turn_function.gd" id="8_4c57u"]
+[ext_resource type="PackedScene" uid="uid://bj1o0wtidtkmc" path="res://effects/vignette.tscn" id="8_efxa6"]
+[ext_resource type="Script" uid="uid://yopoi0q5gh6e" path="res://player/functions/direct_movement_function.gd" id="8_kek77"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1bvp3"]
+radius = 0.3
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lquwl"]
 transparency = 1
@@ -16,6 +21,7 @@ cull_mode = 2
 albedo_color = Color(0.305882, 0.564706, 0.901961, 0.270588)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_7mycd"]
+radius = 0.3
 
 [sub_resource type="SphereMesh" id="SphereMesh_ig7tw"]
 radius = 0.15
@@ -41,6 +47,7 @@ script = ExtResource("1_0usdb")
 [node name="World" parent="." instance=ExtResource("6_7mycd")]
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+script = ExtResource("3_5vw27")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -48,6 +55,7 @@ shape = SubResource("CapsuleShape3D_1bvp3")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+layers = 4
 material_override = SubResource("StandardMaterial3D_lquwl")
 mesh = SubResource("CapsuleMesh_7mycd")
 
@@ -61,7 +69,7 @@ fade_effect = NodePath("XRCamera3D/Fade")
 
 [node name="XRCamera3D" type="XRCamera3D" parent="CharacterBody3D/XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
-cull_mask = 1048571
+cull_mask = 1048563
 
 [node name="HMD" parent="CharacterBody3D/XROrigin3D/XRCamera3D" instance=ExtResource("2_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.12)
@@ -85,6 +93,8 @@ label = "         XRCamera3D"
 
 [node name="Fade" parent="CharacterBody3D/XROrigin3D/XRCamera3D" instance=ExtResource("6_5vw27")]
 
+[node name="Vignette" parent="CharacterBody3D/XROrigin3D/XRCamera3D" instance=ExtResource("8_efxa6")]
+
 [node name="LeftHand" type="XRController3D" parent="CharacterBody3D/XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
 tracker = &"left_hand"
@@ -98,6 +108,13 @@ transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 label = "LeftHand
 (XRController3D)"
 
+[node name="TurnFunction" type="Node3D" parent="CharacterBody3D/XROrigin3D/LeftHand" node_paths=PackedStringArray("vignette")]
+script = ExtResource("8_4c57u")
+speed = 1.5708
+vignette = NodePath("../../XRCamera3D/Vignette")
+vignette_strength = 0.5
+metadata/_custom_type_script = "uid://ckh3f7bqrxq42"
+
 [node name="RightHand" type="XRController3D" parent="CharacterBody3D/XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
 tracker = &"right_hand"
@@ -110,6 +127,10 @@ mesh = SubResource("BoxMesh_3adas")
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 label = "RightHand
 (XRController3D)"
+
+[node name="DirectMovementFunction" type="Node3D" parent="CharacterBody3D/XROrigin3D/RightHand"]
+script = ExtResource("8_kek77")
+metadata/_custom_type_script = "uid://yopoi0q5gh6e"
 
 [node name="Axis" parent="CharacterBody3D/XROrigin3D" instance=ExtResource("2_h2yge")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
