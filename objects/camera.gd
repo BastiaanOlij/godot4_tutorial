@@ -1,6 +1,5 @@
 extends Node3D
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var material : StandardMaterial3D = $Display/Screen.material_override

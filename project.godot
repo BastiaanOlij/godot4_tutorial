@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="XR Tutorial FPC part 2"
-config/description="Tutorial for Godot 4 XR First Person Controller"
+config/name="XR Tutorial Spectator View"
+config/description="Tutorial for Godot 4 XR Spectator View"
 run/main_scene="uid://h0trfgfqg5fm"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"

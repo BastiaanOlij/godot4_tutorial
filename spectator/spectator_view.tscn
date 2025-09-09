@@ -1,0 +1,69 @@
+[gd_scene load_steps=6 format=3 uid="uid://h0trfgfqg5fm"]
+
+[ext_resource type="PackedScene" uid="uid://c8kvu7p33cba5" path="res://objects/camera.tscn" id="1_0d0s6"]
+[ext_resource type="Script" uid="uid://bxe85drefelti" path="res://spectator/spectator_view.gd" id="1_4vmdg"]
+[ext_resource type="PackedScene" uid="uid://b76ow8tad8mvr" path="res://main.tscn" id="1_7odkq"]
+[ext_resource type="Script" uid="uid://bvd7fc4teq1us" path="res://spectator/third_person_camera_3d.gd" id="2_4vmdg"]
+[ext_resource type="Script" uid="uid://dq81yr21waxqy" path="res://spectator/stabilized_camera_3d.gd" id="3_rs358"]
+
+[node name="SpectatorView" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_4vmdg")
+
+[node name="ThirdPersonCamera3D" type="Camera3D" parent="." node_paths=PackedStringArray("look_at_node")]
+transform = Transform3D(-0.999353, -7.69865e-09, 0.0359636, 0.0117169, 0.945439, 0.325588, -0.0340014, 0.325799, -0.944827, 0, 2, -3)
+cull_mask = 1048565
+current = true
+script = ExtResource("2_4vmdg")
+look_at_node = NodePath("../HMD/Main/CharacterBody3D/XROrigin3D/XRCamera3D/Head")
+
+[node name="Camera" parent="ThirdPersonCamera3D" instance=ExtResource("1_0d0s6")]
+transform = Transform3D(-1, -9.31323e-10, -8.9407e-08, 1.86265e-09, 1, 0, 8.56817e-08, 0, -1, -0.059, 0, 0)
+
+[node name="Frame" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(310, 310)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 320.0
+offset_bottom = 320.0
+color = Color(0.00602666, 0.216292, 0.313078, 1)
+
+[node name="FirstPersonContainer" type="SubViewportContainer" parent="Frame"]
+layout_mode = 1
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 261.0
+offset_bottom = 261.0
+
+[node name="FirstPersonViewport" type="SubViewport" parent="Frame/FirstPersonContainer"]
+handle_input_locally = false
+msaa_3d = 2
+size = Vector2i(300, 300)
+render_target_update_mode = 4
+
+[node name="StabilizedCamera3D" type="Camera3D" parent="Frame/FirstPersonContainer/FirstPersonViewport" node_paths=PackedStringArray("xr_camera")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+cull_mask = 1048569
+script = ExtResource("3_rs358")
+xr_camera = NodePath("../../../../HMD/Main/CharacterBody3D/XROrigin3D/XRCamera3D")
+
+[node name="FOVSlider" type="HSlider" parent="."]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 325.0
+offset_right = 315.0
+offset_bottom = 341.0
+min_value = 60.0
+max_value = 120.0
+value = 75.0
+
+[node name="HMD" type="SubViewport" parent="."]
+msaa_3d = 2
+
+[node name="Main" parent="HMD" instance=ExtResource("1_7odkq")]
+
+[connection signal="value_changed" from="FOVSlider" to="." method="_on_fov_slider_value_changed"]
+
+[editable path="HMD/Main"]
