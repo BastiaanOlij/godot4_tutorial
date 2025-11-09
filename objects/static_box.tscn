@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://b2emh7acoyb2b"]
+
+[ext_resource type="Script" uid="uid://lgyr411hkobq" path="res://objects/static_box.gd" id="1_isxcn"]
+[ext_resource type="Texture2D" uid="uid://3uhe4qyssf0b" path="res://assets/misc/pattern.png" id="1_tgwwq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7mycd"]
+resource_local_to_scene = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_272bh"]
+resource_local_to_scene = true
+albedo_color = Color(0.665793, 0.400798, 0.279079, 1)
+albedo_texture = ExtResource("1_tgwwq")
+
+[sub_resource type="BoxMesh" id="BoxMesh_5vw27"]
+resource_local_to_scene = true
+
+[node name="Box" type="StaticBody3D"]
+script = ExtResource("1_isxcn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_7mycd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_272bh")
+mesh = SubResource("BoxMesh_5vw27")

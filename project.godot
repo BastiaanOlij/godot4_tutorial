@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="XR Tutorial Spectator View"
-config/description="Tutorial for Godot 4 XR Spectator View"
+config/name="XR Tutorial FPC part 3"
+config/description="Tutorial for Godot 4 XR First "
 run/main_scene="uid://h0trfgfqg5fm"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
@@ -39,6 +39,8 @@ textures/vram_compression/import_etc2_astc=true
 lights_and_shadows/directional_shadow/size=8192
 lights_and_shadows/directional_shadow/size.mobile=4096
 anti_aliasing/quality/msaa_3d=1
+lights_and_shadows/positional_shadow/atlas_size=8192
+lights_and_shadows/positional_shadow/atlas_size.mobile=4096
 
 [xr]
 

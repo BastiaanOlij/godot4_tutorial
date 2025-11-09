@@ -1,19 +1,21 @@
-[gd_scene load_steps=21 format=3 uid="uid://b76ow8tad8mvr"]
+[gd_scene load_steps=19 format=3 uid="uid://b76ow8tad8mvr"]
 
 [ext_resource type="Script" uid="uid://cgwg7tyrwreyv" path="res://main.gd" id="1_0usdb"]
 [ext_resource type="PackedScene" uid="uid://cyyi7if4uax0q" path="res://objects/hmd.tscn" id="2_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://dbkiigg2vm2x7" path="res://objects/axis.tscn" id="2_h2yge"]
 [ext_resource type="Script" uid="uid://cr87psvh4hbhd" path="res://player/character_body_3d.gd" id="3_5vw27"]
+[ext_resource type="Script" uid="uid://ct0nskmc4f6al" path="res://visualisation/capsule_shape.gd" id="4_dg77c"]
 [ext_resource type="Script" uid="uid://biasxjw6teuqt" path="res://player/xr_character_controller.gd" id="4_lquwl"]
 [ext_resource type="PackedScene" uid="uid://dyekd2xothdv" path="res://effects/fade.tscn" id="6_5vw27"]
 [ext_resource type="PackedScene" uid="uid://72x8dv67np16" path="res://objects/world.tscn" id="6_7mycd"]
-[ext_resource type="Texture2D" uid="uid://3uhe4qyssf0b" path="res://assets/misc/pattern.png" id="6_272bh"]
 [ext_resource type="Script" uid="uid://ckh3f7bqrxq42" path="res://player/functions/turn_function.gd" id="8_4c57u"]
 [ext_resource type="PackedScene" uid="uid://bj1o0wtidtkmc" path="res://effects/vignette.tscn" id="8_efxa6"]
 [ext_resource type="Script" uid="uid://yopoi0q5gh6e" path="res://player/functions/direct_movement_function.gd" id="8_kek77"]
+[ext_resource type="PackedScene" uid="uid://b2emh7acoyb2b" path="res://objects/static_box.tscn" id="12_dg77c"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1bvp3"]
 radius = 0.3
+height = 1.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lquwl"]
 transparency = 1
@@ -22,6 +24,7 @@ albedo_color = Color(0.305882, 0.564706, 0.901961, 0.270588)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_7mycd"]
 radius = 0.3
+height = 1.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_ig7tw"]
 radius = 0.15
@@ -33,31 +36,29 @@ size = Vector3(0.1, 0.1, 0.1)
 [sub_resource type="BoxMesh" id="BoxMesh_3adas"]
 size = Vector3(0.1, 0.1, 0.1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_7mycd"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_272bh"]
-albedo_color = Color(0.665793, 0.400798, 0.279079, 1)
-albedo_texture = ExtResource("6_272bh")
-
-[sub_resource type="BoxMesh" id="BoxMesh_5vw27"]
-
 [node name="Main" type="Node3D"]
 script = ExtResource("1_0usdb")
 
 [node name="World" parent="." instance=ExtResource("6_7mycd")]
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("camera")]
 script = ExtResource("3_5vw27")
+camera = NodePath("XROrigin3D/XRCamera3D")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+[node name="BodyCollisionShape" type="CollisionShape3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
 shape = SubResource("CapsuleShape3D_1bvp3")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+[node name="CapsuleShape" type="MeshInstance3D" parent="CharacterBody3D/BodyCollisionShape"]
 layers = 4
 material_override = SubResource("StandardMaterial3D_lquwl")
 mesh = SubResource("CapsuleMesh_7mycd")
+skeleton = NodePath("../..")
+script = ExtResource("4_dg77c")
+
+[node name="FloorRayCast" type="RayCast3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+target_position = Vector3(0, -0.8, 0)
 
 [node name="Axis" parent="CharacterBody3D" instance=ExtResource("2_h2yge")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
@@ -136,12 +137,27 @@ metadata/_custom_type_script = "uid://yopoi0q5gh6e"
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 label = "XROrigin3D"
 
-[node name="Box" type="StaticBody3D" parent="."]
+[node name="Box" parent="." instance=ExtResource("12_dg77c")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78966, 0.46, -0.84498)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Box"]
-shape = SubResource("BoxShape3D_7mycd")
+[node name="Steps" type="Node3D" parent="."]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Box"]
-material_override = SubResource("StandardMaterial3D_272bh")
-mesh = SubResource("BoxMesh_5vw27")
+[node name="Box01" parent="Steps" instance=ExtResource("12_dg77c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.968, -0.3, -1.796)
+size = Vector3(0.5, 1, 1)
+
+[node name="Box02" parent="Steps" instance=ExtResource("12_dg77c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.422, -0.1, -1.796)
+size = Vector3(0.5, 1, 1)
+
+[node name="Box03" parent="Steps" instance=ExtResource("12_dg77c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.924, 0.1, -1.796)
+size = Vector3(0.5, 1, 1)
+
+[node name="Box04" parent="Steps" instance=ExtResource("12_dg77c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.384, 0.3, -1.796)
+size = Vector3(0.5, 1, 1)
+
+[node name="Box05" parent="Steps" instance=ExtResource("12_dg77c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.851, 0.5, -1.796)
+size = Vector3(0.5, 1, 1)

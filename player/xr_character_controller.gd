@@ -20,7 +20,30 @@ extends XROrigin3D
 ## Our head height
 @export_range(0.5, 2.0, 0.01) var head_height = 1.6
 
+## Auto calibrate height
+@export var auto_calibrate_height : bool = true
+
 var shape_query : PhysicsShapeQueryParameters3D
+var calibrated_height : bool = false
+var height_adjustment : float = 0.0
+
+## Calibrate our users height
+func calibrate_height() -> void:
+	var head_tracker : XRPositionalTracker = XRServer.get_tracker("head")
+	if not head_tracker:
+		return
+
+	var head_pose : XRPose = head_tracker.get_pose("default")
+	if not head_pose:
+		return
+
+	var head_transform = head_pose.get_adjusted_transform()
+	var tracked_head_height = head_transform.origin.y
+	height_adjustment = head_height - tracked_head_height
+
+	transform.origin.y = height_adjustment
+	calibrated_height = true
+
 
 func _ready():
 	# Do not run when in editor!
@@ -39,6 +62,24 @@ func _ready():
 	shape_query.collision_mask = character_body.collision_mask
 	shape_query.exclude = [ character_body.get_rid() ]
 	shape_query.shape = shape
+
+	if auto_calibrate_height:
+		calibrate_height()
+
+	var xr_interface : OpenXRInterface = XRServer.find_interface("OpenXR")
+	if xr_interface:
+		xr_interface.session_visible.connect(_on_session_visible)
+		xr_interface.pose_recentered.connect(_on_pose_recenter)
+
+
+func _on_session_visible():
+	if auto_calibrate_height and not calibrated_height:
+		calibrate_height()
+
+
+func _on_pose_recenter():
+	if auto_calibrate_height:
+		calibrate_height()
 
 
 # Provide our configuration warnings

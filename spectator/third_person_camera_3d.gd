@@ -3,7 +3,7 @@ extends Camera3D
 @export var look_at_node : Node3D
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	if not look_at_node:
 		return
 
