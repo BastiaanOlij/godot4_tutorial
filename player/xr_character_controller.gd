@@ -23,9 +23,9 @@ extends XROrigin3D
 ## Auto calibrate height
 @export var auto_calibrate_height : bool = true
 
-var shape_query : PhysicsShapeQueryParameters3D
-var calibrated_height : bool = false
-var height_adjustment : float = 0.0
+var _shape_query : PhysicsShapeQueryParameters3D
+var _calibrated_height : bool = false
+var _height_adjustment : float = 0.0
 
 ## Calibrate our users height
 func calibrate_height() -> void:
@@ -39,10 +39,10 @@ func calibrate_height() -> void:
 
 	var head_transform = head_pose.get_adjusted_transform()
 	var tracked_head_height = head_transform.origin.y
-	height_adjustment = head_height - tracked_head_height
+	_height_adjustment = head_height - tracked_head_height
 
-	transform.origin.y = height_adjustment
-	calibrated_height = true
+	transform.origin.y = _height_adjustment
+	_calibrated_height = true
 
 
 func _ready():
@@ -58,10 +58,10 @@ func _ready():
 	var shape : SphereShape3D = SphereShape3D.new()
 	shape.radius = head_radius
 
-	shape_query = PhysicsShapeQueryParameters3D.new()
-	shape_query.collision_mask = character_body.collision_mask
-	shape_query.exclude = [ character_body.get_rid() ]
-	shape_query.shape = shape
+	_shape_query = PhysicsShapeQueryParameters3D.new()
+	_shape_query.collision_mask = character_body.collision_mask
+	_shape_query.exclude = [ character_body.get_rid() ]
+	_shape_query.shape = shape
 
 	if auto_calibrate_height:
 		calibrate_height()
@@ -73,7 +73,7 @@ func _ready():
 
 
 func _on_session_visible():
-	if auto_calibrate_height and not calibrated_height:
+	if auto_calibrate_height and not _calibrated_height:
 		calibrate_height()
 
 
@@ -163,10 +163,10 @@ func _physics_process(_delta):
 
 	var t : Transform3D = Transform3D()
 	t.origin = character_body.global_transform * Vector3(0.0, head_height, 0.0)
-	shape_query.transform = t
-	shape_query.motion = camera.global_position - t.origin
+	_shape_query.transform = t
+	_shape_query.motion = camera.global_position - t.origin
 
-	var collision = state.cast_motion(shape_query)
+	var collision = state.cast_motion(_shape_query)
 	var is_colliding : bool = not collision.is_empty() and collision[0] < 1.0
 
 	# Calculate how far away we are from our target location
